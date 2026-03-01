@@ -23,3 +23,48 @@ MEMORY {
 }
 
 ENTRY(vector);
+
+SECTIONS {
+
+  .text : {
+    . = 0x00000000;
+    *(.vector);
+    . = ALIGN(4);
+    *(.text);
+    . = ALIGN(4);
+  } > flash
+
+  .rodata : {
+    *(.rodata);
+    . = ALIGN(4);
+  } > flash
+
+  .data : {
+    . = 0x00000000;
+    *(.data);
+    . = ALIGN(4);
+  } > sram AT > flash
+
+  .bss : {
+    *(.bss);
+    . = ALIGN(4);
+  } > sram
+
+  __DATA_LMA = LOADADDR(.data);
+  __DATA_VMA = ADDR(.data);
+  __DATA_END = ADDR(.data) + SIZEOF(.data);
+  __BSS_VMA  = ADDR(.bss);
+  __BSS_END  = ADDR(.bss) + SIZEOF(.bss);
+}
+
+PROVIDE(__INITIAL_SP = ORIGIN(sram) + LENGTH(sram));
+PROVIDE(__VECTOR_CHECKSUM = 0 - __INITIAL_SP
+                              - (__reset + 1)
+                              - 1
+                              - 1);
+
+PROVIDE(LPC_SYSCON = 0x40048000);
+PROVIDE(LPC_IOCONFIG = 0x40044000);
+
+PROVIDE(LPC_GPIO0 = 0x50000000);
+PROVIDE(LPC_GPIO1 = 0x50010000);

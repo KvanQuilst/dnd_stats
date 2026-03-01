@@ -19,44 +19,20 @@
  *****************************************************************************/
 #include "stats.h"
 
-inline void stat_hp_increase(struct statblock *sb, uint8_t points)
-{
-  uint16_t result = sb->hp + (uint16_t)points;
-  sb->hp = (result > HP_MAX || result < sb->hp) ? HP_MAX
-                                                : result;
-}
+enum state_e {
+  STATE_START,
+};
 
-inline void stat_hp_decrease(struct statblock *sb, uint8_t points)
+void run()
 {
-  uint16_t result = sb->hp - (uint16_t)points;
-  sb->hp = (result > sb->hp) ? 0
-                             : result;
-}
+  enum state_e state = STATE_START;
 
-inline void stat_temp_increase(struct statblock *sb, uint8_t points)
-{
-  uint16_t result = sb->temp + (uint16_t)points;
-  sb->temp = (result > TEMP_MAX || result < sb->temp) ? TEMP_MAX
-                                                      : result;
-}
+  // TODO: Flash logo before showing menus
 
-inline void stat_temp_decrease(struct statblock *sb, uint8_t points)
-{
-  uint16_t result = sb->temp - (uint16_t)points;
-  sb->temp = (result > sb->temp) ? 0
-                                 : result;
-}
-
-inline void stat_xp_increase(struct statblock *sb, uint8_t points)
-{
-  uint16_t result = sb->xp + (uint32_t)points;
-  sb->xp = (result < sb->xp) ? UINT32_MAX
-                             : result;
-}
-
-inline void stat_xp_decrease(struct statblock *sb, uint8_t points)
-{
-  uint16_t result = sb->xp - (uint32_t)points;
-  sb->xp = (result > sb->xp) ? 0
-                             : result;
+  while (true) {
+    switch (state) {
+    case STATE_START:
+      break;
+    }
+  }
 }
