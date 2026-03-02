@@ -1,0 +1,7 @@
+[package]
+name = "dnd-stats"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+lpc1114-rt = { path = "../lpc1114-rt" }
