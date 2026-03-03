@@ -17,9 +17,9 @@ global_asm!(
      .global main
      .global VectorReset
 
-     .type VectorReset,%function
+     .type __reset,%function
      .thumb_func
-     VectorReset:
+     __reset:
 
      __init_bss:
         movs r2, #0         // Zero r2

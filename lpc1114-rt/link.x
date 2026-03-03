@@ -5,7 +5,7 @@ MEMORY
     SRAM  : ORIGIN = 0x10000000, LENGTH = 4k
 }
 
-ENTRY(VectorReset);
+ENTRY(__reset);
 
 SECTIONS
 {
