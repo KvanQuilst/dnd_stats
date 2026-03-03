@@ -7,8 +7,6 @@ MEMORY
 
 ENTRY(VectorReset);
 
-EXTERN(RESET_VECTOR);
-
 SECTIONS
 {
     .vector ORIGIN(FLASH) :
@@ -16,8 +14,11 @@ SECTIONS
         /* Stack Pointer */
         LONG(ORIGIN(SRAM) + LENGTH(SRAM));
 
-        /* Reset Vector */
+        /* Reset, first entry of Exception Vector */
         KEEP(*(.vector.reset));
+
+        /* Exception Vector */
+        KEEP(*(.vector.exception));
     } > FLASH
 
     .text :
@@ -51,3 +52,9 @@ SECTIONS
       *(.ARM.exidx . ARM.exidx.*);
     }
 }
+
+PROVIDE(exception_nmi = exception_default_handler());
+PROVIDE(exception_hardfault = exception_default_handler());
+PROVIDE(exception_svcall = exception_default_handler());
+PROVIDE(exception_pendsv = exception_default_handler());
+PROVIDE(exception_systick = exception_default_handlers());

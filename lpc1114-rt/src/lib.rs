@@ -52,6 +52,48 @@ global_asm!(
     bx r0"
 );
 
+pub union Exception {
+    reserved: u32,
+    handler: unsafe extern "C" fn(),
+}
+
+unsafe extern "C" {
+    fn exception_nmi();
+    fn exception_hardfault();
+    fn exception_svcall();
+    fn exception_pendsv();
+    fn exception_systick();
+}
+
+#[unsafe(link_section = ".vector.exceptions")]
+#[unsafe(no_mangle)]
+pub static EXCEPTIONS: [Exception; 14] = [
+    // Reset 1
+    Exception { handler: exception_nmi }, // 2
+    Exception { handler: exception_hardfault }, // 3
+
+    Exception { reserved: 0 }, // 4
+    Exception { reserved: 0 }, // 5
+    Exception { reserved: 0 }, // 6
+    Exception { reserved: 0 }, // 7
+    Exception { reserved: 0 }, // 8
+    Exception { reserved: 0 }, // 9
+    Exception { reserved: 0 }, // 10
+
+    Exception { handler: exception_svcall }, // 11
+    
+    Exception { reserved: 0 }, // 12
+    Exception { reserved: 0 }, // 13
+    
+    Exception { handler: exception_pendsv }, // 14
+    Exception { handler: exception_systick }, // 15
+];
+
+#[unsafe(no_mangle)]
+pub extern "C" fn exception_default_handler() {
+    loop {}
+}
+
 #[panic_handler]
 #[inline(never)]
 fn panic(_panic: &PanicInfo<'_>) -> ! {
