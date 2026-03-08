@@ -1,7 +1,12 @@
 #![no_std]
+#![allow(unused)]
 
 use core::panic::PanicInfo;
 use core::arch::global_asm;
+
+pub mod pins;
+
+use pins::gpio;
 
 global_asm!(
     ".text
@@ -17,6 +22,7 @@ global_asm!(
      .global main
      .global VectorReset
 
+     .global __reset
      .type __reset,%function
      .thumb_func
      __reset:
@@ -52,17 +58,22 @@ global_asm!(
     bx r0"
 );
 
-pub union Exception {
-    reserved: u32,
-    handler: unsafe extern "C" fn(),
-}
-
 unsafe extern "C" {
+    fn __reset();
     fn exception_nmi();
     fn exception_hardfault();
     fn exception_svcall();
     fn exception_pendsv();
     fn exception_systick();
+}
+
+#[unsafe(link_section = ".vector.reset")]
+#[unsafe(no_mangle)]
+pub static RESET: unsafe extern "C" fn() = __reset;
+
+pub union Exception {
+    reserved: u32,
+    handler: unsafe extern "C" fn(),
 }
 
 #[unsafe(link_section = ".vector.exceptions")]
@@ -71,11 +82,10 @@ pub static EXCEPTIONS: [Exception; 14] = [
     // Reset 1
     Exception { handler: exception_nmi }, // 2
     Exception { handler: exception_hardfault }, // 3
-
     Exception { reserved: 0 }, // 4
     Exception { reserved: 0 }, // 5
     Exception { reserved: 0 }, // 6
-    Exception { reserved: 0 }, // 7
+    Exception { reserved: 0xefff_e16d }, // 7 - Checksum
     Exception { reserved: 0 }, // 8
     Exception { reserved: 0 }, // 9
     Exception { reserved: 0 }, // 10
