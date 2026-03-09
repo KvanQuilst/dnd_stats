@@ -5,3 +5,6 @@ edition = "2024"
 
 [dependencies]
 lpc1114-rt = { path = "../lpc1114-rt" }
+
+[profile.release]
+opt-level = 0
