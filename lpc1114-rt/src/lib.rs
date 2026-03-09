@@ -85,7 +85,7 @@ pub static EXCEPTIONS: [Exception; 14] = [
     Exception { reserved: 0 }, // 4
     Exception { reserved: 0 }, // 5
     Exception { reserved: 0 }, // 6
-    Exception { reserved: 0xefff_e16d }, // 7 - Checksum
+    Exception { reserved: 0 }, // 7 - Checksum, run lpc1114_checksum.py on bin
     Exception { reserved: 0 }, // 8
     Exception { reserved: 0 }, // 9
     Exception { reserved: 0 }, // 10

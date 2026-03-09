@@ -60,15 +60,8 @@ SECTIONS
 
 __data_lma = LOADADDR(.data);
 
-/*PROVIDE(__initial_sp = ORIGIN(SRAM) + LENGTH(SRAM));*/
 PROVIDE(exception_nmi = exception_default_handler);
 PROVIDE(exception_hardfault = exception_default_handler);
 PROVIDE(exception_svcall = exception_default_handler);
 PROVIDE(exception_pendsv = exception_default_handler);
 PROVIDE(exception_systick = exception_default_handler);
-
-/*PROVIDE(__VECTOR_CHECKSUM = 0 - __initial_sp
-                                - (__reset + 1)
-                                - (exception_nmi + 1)
-                                - (exception_hardfault + 1));
-*/
