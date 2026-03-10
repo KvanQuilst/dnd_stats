@@ -4,9 +4,9 @@
 use core::panic::PanicInfo;
 use core::arch::global_asm;
 
-pub mod pins;
+pub mod gpio;
 
-use pins::gpio;
+//use pins::gpio2;
 
 global_asm!(
     ".text
