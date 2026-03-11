@@ -1,8 +1,8 @@
 #![no_std]
 #![allow(unused)]
 
-use core::panic::PanicInfo;
 use core::arch::global_asm;
+use core::panic::PanicInfo;
 
 pub mod gpio;
 
@@ -80,8 +80,12 @@ pub union Exception {
 #[unsafe(no_mangle)]
 pub static EXCEPTIONS: [Exception; 14] = [
     // Reset 1
-    Exception { handler: exception_nmi }, // 2
-    Exception { handler: exception_hardfault }, // 3
+    Exception {
+        handler: exception_nmi, // 2
+    },
+    Exception {
+        handler: exception_hardfault, // 3
+    },
     Exception { reserved: 0 }, // 4
     Exception { reserved: 0 }, // 5
     Exception { reserved: 0 }, // 6
@@ -89,14 +93,17 @@ pub static EXCEPTIONS: [Exception; 14] = [
     Exception { reserved: 0 }, // 8
     Exception { reserved: 0 }, // 9
     Exception { reserved: 0 }, // 10
-
-    Exception { handler: exception_svcall }, // 11
-    
+    Exception {
+        handler: exception_svcall, // 11
+    },
     Exception { reserved: 0 }, // 12
     Exception { reserved: 0 }, // 13
-    
-    Exception { handler: exception_pendsv }, // 14
-    Exception { handler: exception_systick }, // 15
+    Exception {
+        handler: exception_pendsv, // 14
+    },
+    Exception {
+        handler: exception_systick, // 15
+    },
 ];
 
 #[unsafe(no_mangle)]
@@ -119,5 +126,5 @@ macro_rules! entry_point {
             let f: fn() -> ! = $path;
             f();
         }
-    }
+    };
 }
