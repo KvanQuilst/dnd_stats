@@ -3,24 +3,32 @@
 
 use core::arch::asm;
 use lpc1114_rt::entry_point;
-use lpc1114_rt::pins::gpio::{
-    GpioCfg,
+use lpc1114_rt::gpio::{
+    GpioPin,
     GpioPort,
 };
 
-entry_point!(main);
 fn main() -> ! {
-    loop {
-        let gpio0_7 = GpioCfg::new(GpioPort::Port0, 7);
-        let gpio0_7_out = gpio0_7.into_dir_output();
-        let gpio0_7_hi = gpio0_7_out.into_data_high();
+    let pin = GpioPin::new().into_port0().into_pin7();
+    GpioPort::set_dir_output(&pin);
+    let mut i;
 
-        for _n in 1..5000 {
+    loop {
+        GpioPort::set_data_high(&pin);
+
+        i = 0u16;
+        while i < 10000u16 {
             unsafe { asm!("nop"); }
+            i += 1u16;
         }
-        gpio0_7_hi.into_data_low();
-        for _n in 1..5000 {
+
+        GpioPort::set_data_low(&pin);
+
+        i = 0u16;
+        while i < 10000u16 {
             unsafe { asm!("nop"); }
+            i += 1u16;
         }
     }
 }
+entry_point!(main);
